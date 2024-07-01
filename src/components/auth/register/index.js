@@ -15,10 +15,19 @@ const RegisterPage = () => {
 
     const registerSchema = yup.object({
         lastName: yup.string()
-            .required("Вкажіть прізвище")
+            .required("Вкажіть прізвище"),
+        firstName: yup.string()
+            .required("Вкажіть ім'я"),
+        phone: yup.string()
+            .required("Вкажіть телефон"),
+        image: yup.mixed()
+            .required('Картинка є обов\'язковою')
+            .test(
+                'fileType',
+                'Неправильний формат файлу',
+                value => value && ['image/jpeg', 'image/png', 'image/webp'].includes(value?.type)
+            ),
     });
-
-    const [data, setData] = useState(initValue);
 
     const handleFormikSubmit = (values) => {
         //e.preventDefault();
@@ -32,27 +41,23 @@ const RegisterPage = () => {
     });
 
     const {values, touched, errors,
-        handleSubmit, handleChange} = formik;
-
-    const onChangeHandler = (e) => {
-        // console.log("onChange", e.target);
-        // console.log("onChange", e.target.name);
-        // console.log("onChange", e.target.value);
-        setData({...data, [e.target.name]: e.target.value});
-    }
+        handleSubmit, handleChange, setFieldValue} = formik;
 
     const onChangeFileHandler = (e) => {
         console.log("onChange", e.target.files);
         const file = e.target.files[0];
         if (file) {
-            setData({...data, [e.target.name]: file});
+            setFieldValue(e.target.name, file);
+            //setData({...data, [e.target.name]: file});
         }
         else {
-            setData({...data, [e.target.name]: null});
-            alert("Оберіть фото");
+            setFieldValue(e.target.name, null);
+            //setData({...data, [e.target.name]: null});
+            //alert("Оберіть фото");
         }
     }
 
+    console.log("errors ", errors);
     return (
         <>
             <h1 className={"text-center"}>Реєстрація</h1>
@@ -63,15 +68,18 @@ const RegisterPage = () => {
                            onChange={handleChange}/>
 
                 <TextInput label={"Ім'я"} field={"firstName"} type={"text"}
-                           value={data.firstName}
-                           onChange={onChangeHandler}/>
+                           value={values.firstName}
+                           error={errors.firstName}
+                           onChange={handleChange}/>
 
                 <TextInput label={"Телефон"} field={"phone"} type={"text"}
-                           value={data.phone}
-                           onChange={onChangeHandler}/>
+                           value={values.phone}
+                           error={errors.phone}
+                           onChange={handleChange}/>
 
                 <FileInput label={"Фото"} field={"image"}
-                           value={data.image}
+                           value={values.image}
+                           error={errors.image}
                            onChange={onChangeFileHandler}/>
 
                 <button type="submit" className="btn btn-primary">Реєструватися</button>
