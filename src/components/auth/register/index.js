@@ -1,6 +1,8 @@
 import TextInput from "../../common/textInput";
 import {useState} from "react";
 import FileInput from "../../common/fileInput";
+import * as yup from "yup";
+import {useFormik} from "formik";
 
 const RegisterPage = () => {
 
@@ -11,12 +13,26 @@ const RegisterPage = () => {
         image: null
     };
 
+    const registerSchema = yup.object({
+        lastName: yup.string()
+            .required("Вкажіть прізвище")
+    });
+
     const [data, setData] = useState(initValue);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Submit form ", data);
+    const handleFormikSubmit = (values) => {
+        //e.preventDefault();
+        console.log("Submit form ", values);
     }
+
+    const formik = useFormik({
+       initialValues: initValue,
+        onSubmit: handleFormikSubmit,
+        validationSchema: registerSchema
+    });
+
+    const {values, touched, errors,
+        handleSubmit, handleChange} = formik;
 
     const onChangeHandler = (e) => {
         // console.log("onChange", e.target);
@@ -42,8 +58,9 @@ const RegisterPage = () => {
             <h1 className={"text-center"}>Реєстрація</h1>
             <form onSubmit={handleSubmit} className={"col-md-6 offset-md-3"}>
                 <TextInput label={"Прізвище"} field={"lastName"} type={"text"}
-                           value={data.lastName}
-                           onChange={onChangeHandler}/>
+                           value={values.lastName}
+                           error={errors.lastName}
+                           onChange={handleChange}/>
 
                 <TextInput label={"Ім'я"} field={"firstName"} type={"text"}
                            value={data.firstName}
