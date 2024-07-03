@@ -23,19 +23,47 @@ const MultiFileInput = ({label, field, value, error, onChange}) => {
         if (!result.destination) {
             return;
         }
-
         const reorderedImages = Array.from(images);
         const [movedImage] = reorderedImages.splice(result.source.index, 1);
         reorderedImages.splice(result.destination.index, 0, movedImage);
 
         setImages(reorderedImages);
     };
-    // console.log("error", error);
 
     return (
         <>
             <div className="mb-3">
                 <div className="row">
+                    <DragDropContext onDragEnd={onDragEnd}>
+                        <Droppable droppableId="images" direction={"horizontal"}>
+                            {(provided) => (
+                                <div
+                                    className={"row"}
+                                    {...provided.droppableProps}
+                                    ref={provided.innerRef}
+                                >
+                                    {images.map((image, index) => (
+                                        <Draggable key={image} draggableId={image} index={index}>
+                                            {(provided) => (
+                                                <div
+                                                    className="col-md-3 image-preview"
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                >
+                                                    <img src={image} className={"img-fluid"} alt={`Preview ${index}`}/>
+                                                    <button onClick={() => removeImage(index)} className="remove-button">X
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+
                     <div className="col-md-3">
                         <label htmlFor={field} className="form-label">
                             <img src={img} alt="" className={"img-fluid"}/>
@@ -56,35 +84,7 @@ const MultiFileInput = ({label, field, value, error, onChange}) => {
                     }
 
 
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="images">
-                            {(provided) => (
-                                <div
-                                    className="image-preview-container"
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                >
-                                    {images.map((image, index) => (
-                                        <Draggable key={image} draggableId={image} index={index}>
-                                            {(provided) => (
-                                                <div
-                                                    className="image-preview"
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                >
-                                                    <img src={image} alt={`Preview ${index}`}/>
-                                                    <button onClick={() => removeImage(index)} className="remove-button">X
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
+
                 </div>
 
             </div>
