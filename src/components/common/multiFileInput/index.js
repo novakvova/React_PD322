@@ -2,17 +2,24 @@ import plusImage from "../../../assets/images/plus.jpg";
 import classNames from "classnames";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import './style.css';
-import {useState} from "react";
+import {useRef, useState} from "react";
 
 const MultiFileInput = ({label, field, value, error, onChange}) => {
-    const img = value == null ? plusImage : URL.createObjectURL(value);
 
     const [images, setImages] = useState([]);
+    const [filesList, setFilesList] = useState([]);
+
+
 
     const handleFileChange = (event) => {
+        console.log("List files", event.target.files);
         const files = Array.from(event.target.files);
-        const imageFiles = files.map((file) => URL.createObjectURL(file));
+        const list = [...filesList, ...files];
+        setFilesList(list);
+        onChange(list);
+       const imageFiles = files.map((file) => URL.createObjectURL(file));
         setImages(prevImages => [...prevImages, ...imageFiles]);
+
     };
 
     const removeImage = (index) => {
@@ -61,7 +68,7 @@ const MultiFileInput = ({label, field, value, error, onChange}) => {
 
                                     <div className="col-md-3">
                                         <label htmlFor={field} className="form-label">
-                                            <img src={img} alt="" className={"img-fluid"}/>
+                                            <img src={plusImage} alt="" className={"img-fluid"}/>
                                         </label>
                                         <input type="file"
                                                className={classNames("d-none")}

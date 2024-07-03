@@ -40,8 +40,8 @@ const PizzaCreatePage = () => {
     const {values, touched, errors,
         handleSubmit, handleChange, setFieldValue} = formik;
 
-    const onChangeFileHandler = (e) => {
-        console.log("onChange", e.target.files);
+    const onChangeFileHandler = (files) => {
+        console.log("onChange", files);
         // const file = e.target.files[0];
         // if (file) {
         //     setFieldValue(e.target.name, file);
