@@ -58,24 +58,26 @@ const MultiFileInput = ({label, field, value, error, onChange}) => {
                                             )}
                                         </Draggable>
                                     ))}
+
+                                    <div className="col-md-3">
+                                        <label htmlFor={field} className="form-label">
+                                            <img src={img} alt="" className={"img-fluid"}/>
+                                        </label>
+                                        <input type="file"
+                                               className={classNames("d-none")}
+                                               id={field}
+                                               name={field}
+                                               multiple={true}
+                                               onChange={handleFileChange}
+                                               aria-describedby="emailHelp"/>
+                                    </div>
                                     {provided.placeholder}
                                 </div>
                             )}
                         </Droppable>
                     </DragDropContext>
 
-                    <div className="col-md-3">
-                        <label htmlFor={field} className="form-label">
-                            <img src={img} alt="" className={"img-fluid"}/>
-                        </label>
-                        <input type="file"
-                               className={classNames("d-none")}
-                               id={field}
-                               name={field}
-                               multiple={true}
-                               onChange={handleFileChange}
-                               aria-describedby="emailHelp"/>
-                    </div>
+
                     {
                         error &&
                         <div className="alert alert-danger">
