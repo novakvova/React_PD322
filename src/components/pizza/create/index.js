@@ -17,13 +17,13 @@ const PizzaCreatePage = () => {
             .required("Вкажіть назву"),
         description: yup.string()
             .required("Вкажіть опис"),
-        images: yup.mixed()
-            .required('Фото є обов\'язковими')
-            .test(
-                'fileType',
-                'Неправильний формат файлу',
-                value => value && ['image/jpeg', 'image/png', 'image/webp'].includes(value?.type)
-            ),
+        // images: yup.mixed()
+        //     .required('Фото є обов\'язковими')
+        //     .test(
+        //         'fileType',
+        //         'Неправильний формат файлу',
+        //         value => value && ['image/jpeg', 'image/png', 'image/webp'].includes(value?.type)
+        //     ),
     });
 
     const handleFormikSubmit = (values) => {
@@ -40,8 +40,10 @@ const PizzaCreatePage = () => {
     const {values, touched, errors,
         handleSubmit, handleChange, setFieldValue} = formik;
 
+    //console.log("touched", touched);
     const onChangeFileHandler = (files) => {
         console.log("onChange", files);
+        setFieldValue("images", files);
         // const file = e.target.files[0];
         // if (file) {
         //     setFieldValue(e.target.name, file);
@@ -61,12 +63,14 @@ const PizzaCreatePage = () => {
             <form onSubmit={handleSubmit} className={"col-md-6 offset-md-3"}>
                 <TextInput label={"Назва"} field={"name"} type={"text"}
                            value={values.name}
+                           touched={touched.name}
                            error={errors.name}
                            onChange={handleChange}/>
 
                 <TextInput label={"Опис"} field={"description"} type={"text"}
                            value={values.description}
                            error={errors.description}
+                           touched={touched.description}
                            onChange={handleChange}/>
 
                 <MultiFileInput label={"Фото"} field={"image"}
