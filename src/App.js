@@ -7,8 +7,8 @@ import NotFoundPage from "./components/pages/404";
 import PizzaCreatePage from "./components/pizza/create";
 import {useState} from "react";
 import {AuthContext, initState} from "./authContext";
-import novaPoshta from "./components/novaPoshta";
 import NovaPoshtaPage from "./components/novaPoshta";
+import CounterPage from "./components/counter";
 
 const App = () => {
 
@@ -29,6 +29,8 @@ const App = () => {
                     <Route index element={<HomePage />} />
                     <Route path={"register"} element={<RegisterPage />} />
                     <Route path={"novaPoshta"} element={<NovaPoshtaPage />} />
+
+                    <Route path={"counter"} element={<CounterPage />} />
 
                     <Route path={"pizza"} >
                         <Route path={"create"} element={<PizzaCreatePage />} />
